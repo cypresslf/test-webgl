@@ -1,7 +1,7 @@
 /**
  * @typedef {Object} Buffers
  * @property {WebGLBuffer | null} position
- * @property {WebGLBuffer | null} color
+ * @property {WebGLBuffer | null} textureCoord
  * @property {WebGLBuffer | null} indices
  */
 
@@ -12,7 +12,7 @@
 function initBuffers(gl) {
   return {
     position: initPositionBuffer(gl),
-    color: initColorBuffer(gl),
+    textureCoord: initTextureBuffer(gl),
     indices: initIndexBuffer(gl),
   };
 }
@@ -43,28 +43,28 @@ function initPositionBuffer(gl) {
 }
 
 /** @param {WebGLRenderingContext} gl */
-function initColorBuffer(gl) {
-  const colorBuffer = gl.createBuffer();
-  gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
-
+function initTextureBuffer(gl) {
+  const textureCoordBuffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, textureCoordBuffer);
   gl.bufferData(
     gl.ARRAY_BUFFER,
-    new Float32Array(
-      [
-        [1, 1, 1, 1], // Front face: white
-        [1, 0, 0, 1], // Back face: red
-        [0, 1, 0, 1], // Top face: green
-        [0, 0, 1, 1], // Bottom face: blue
-        [1, 1, 0, 1], // Right face: yellow
-        [1, 0, 1, 1], // Left face: purple
-      ].flatMap(
-        // Repeat each color four times for the four vertices of the face
-        (c) => Array(4).fill(c).flat()
-      )
-    ),
+    new Float32Array([
+      // Front
+      0, 0, 1, 0, 1, 1, 0, 1,
+      // Back
+      0, 0, 1, 0, 1, 1, 0, 1,
+      // Top
+      0, 0, 1, 0, 1, 1, 0, 1,
+      // Bottom
+      0, 0, 1, 0, 1, 1, 0, 1,
+      // Right
+      0, 0, 1, 0, 1, 1, 0, 1,
+      // Left
+      0, 0, 1, 0, 1, 1, 0, 1,
+    ]),
     gl.STATIC_DRAW
   );
-  return colorBuffer;
+  return textureCoordBuffer;
 }
 
 /** @param {WebGLRenderingContext} gl */

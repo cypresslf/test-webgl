@@ -5,9 +5,10 @@ const { mat4 } = glMatrix;
  * @param {WebGLRenderingContext} gl
  * @param {import("./main").ShaderInfo} shaderInfo
  * @param {import("./init-buffers").Buffers} buffers
+ * @param {WebGLTexture} texture
  * @param {number} cubeRotation
  */
-function drawScene(gl, shaderInfo, buffers, cubeRotation) {
+function drawScene(gl, shaderInfo, buffers, texture, cubeRotation) {
   if (gl.canvas instanceof OffscreenCanvas) {
     console.error("canvas is offscreen. cannot draw scene");
     return;
@@ -49,7 +50,7 @@ function drawScene(gl, shaderInfo, buffers, cubeRotation) {
     [1, 0, 0]
   ); // axis to rotate around (X)
   setPositionAttribute(gl, buffers, shaderInfo);
-  setColorAttributes(gl, buffers, shaderInfo);
+  setTextureAttribute(gl, buffers, shaderInfo);
   gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffers.indices);
   gl.useProgram(shaderInfo.shader);
   gl.uniformMatrix4fv(
@@ -58,6 +59,9 @@ function drawScene(gl, shaderInfo, buffers, cubeRotation) {
     projection
   );
   gl.uniformMatrix4fv(shaderInfo.uniformLocations.modelView, false, modelView);
+  gl.activeTexture(gl.TEXTURE0);
+  gl.bindTexture(gl.TEXTURE_2D, texture);
+  gl.uniform1i(shaderInfo.uniformLocations.sampler, 0);
   {
     const vertexCount = 36;
     const type = gl.UNSIGNED_SHORT;
@@ -94,22 +98,22 @@ function setPositionAttribute(gl, buffers, shaderInfo) {
  * @param {import("./init-buffers").Buffers} buffers
  * @param {import("./main").ShaderInfo} shaderInfo
  */
-function setColorAttributes(gl, buffers, shaderInfo) {
-  const numComponents = 4;
+function setTextureAttribute(gl, buffers, shaderInfo) {
+  const num = 2;
   const type = gl.FLOAT;
   const normalize = false;
   const stride = 0;
   const offset = 0;
-  gl.bindBuffer(gl.ARRAY_BUFFER, buffers.color);
+  gl.bindBuffer(gl.ARRAY_BUFFER, buffers.textureCoord);
   gl.vertexAttribPointer(
-    shaderInfo.attributeLocations.color,
-    numComponents,
+    shaderInfo.attributeLocations.textureCoord,
+    num,
     type,
     normalize,
     stride,
     offset
   );
-  gl.enableVertexAttribArray(shaderInfo.attributeLocations.color);
+  gl.enableVertexAttribArray(shaderInfo.attributeLocations.textureCoord);
 }
 
 export { drawScene };
