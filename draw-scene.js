@@ -5,9 +5,9 @@ const { mat4 } = glMatrix;
  * @param {WebGLRenderingContext} gl
  * @param {import("./main").ShaderInfo} shaderInfo
  * @param {import("./init-buffers").Buffers} buffers
- * @param {number} squareRotation
+ * @param {number} cubeRotation
  */
-function drawScene(gl, shaderInfo, buffers, squareRotation) {
+function drawScene(gl, shaderInfo, buffers, cubeRotation) {
   if (gl.canvas instanceof OffscreenCanvas) {
     console.error("canvas is offscreen. cannot draw scene");
     return;
@@ -30,9 +30,27 @@ function drawScene(gl, shaderInfo, buffers, squareRotation) {
 
   const modelView = mat4.create();
   mat4.translate(modelView, modelView, [-0, 0, -6]);
-  mat4.rotate(modelView, modelView, squareRotation, [0, 0, 1]);
+  mat4.rotate(
+    modelView, // destination matrix
+    modelView, // matrix to rotate
+    cubeRotation, // amount to rotate in radians
+    [0, 0, 1]
+  ); // axis to rotate around (Z)
+  mat4.rotate(
+    modelView, // destination matrix
+    modelView, // matrix to rotate
+    cubeRotation * 0.7, // amount to rotate in radians
+    [0, 1, 0]
+  ); // axis to rotate around (Y)
+  mat4.rotate(
+    modelView, // destination matrix
+    modelView, // matrix to rotate
+    cubeRotation * 0.3, // amount to rotate in radians
+    [1, 0, 0]
+  ); // axis to rotate around (X)
   setPositionAttribute(gl, buffers, shaderInfo);
   setColorAttributes(gl, buffers, shaderInfo);
+  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffers.indices);
   gl.useProgram(shaderInfo.shader);
   gl.uniformMatrix4fv(
     shaderInfo.uniformLocations.projection,
@@ -41,9 +59,10 @@ function drawScene(gl, shaderInfo, buffers, squareRotation) {
   );
   gl.uniformMatrix4fv(shaderInfo.uniformLocations.modelView, false, modelView);
   {
+    const vertexCount = 36;
+    const type = gl.UNSIGNED_SHORT;
     const offset = 0;
-    const vertexCount = 4;
-    gl.drawArrays(gl.TRIANGLE_STRIP, offset, vertexCount);
+    gl.drawElements(gl.TRIANGLES, vertexCount, type, offset);
   }
 }
 
@@ -53,7 +72,7 @@ function drawScene(gl, shaderInfo, buffers, squareRotation) {
  * @param {import("./main").ShaderInfo} shaderInfo
  */
 function setPositionAttribute(gl, buffers, shaderInfo) {
-  const numComponents = 2;
+  const numComponents = 3;
   const type = gl.FLOAT;
   const normalize = false;
   const stride = 0;

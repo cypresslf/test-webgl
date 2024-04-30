@@ -67,15 +67,15 @@ function main() {
 
   let then = 0;
   let deltaTime = 0;
-  let squareRotation = 0;
+  let cubeRotation = 0;
 
   /** @param {number} now */
   const render = (now) => {
     now *= 0.001; // convert to seconds
     deltaTime = now - then;
     then = now;
-    drawScene(gl, shaderInfo, buffers, squareRotation);
-    squareRotation += deltaTime;
+    drawScene(gl, shaderInfo, buffers, cubeRotation);
+    cubeRotation += deltaTime;
     requestAnimationFrame(render);
   };
   requestAnimationFrame(render);
