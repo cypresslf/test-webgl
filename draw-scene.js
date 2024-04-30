@@ -49,16 +49,25 @@ function drawScene(gl, shaderInfo, buffers, texture, cubeRotation) {
     cubeRotation * 0.3, // amount to rotate in radians
     [1, 0, 0]
   ); // axis to rotate around (X)
+  const normal = mat4.create();
+  mat4.invert(normal, modelView);
+  mat4.transpose(normal, normal);
   setPositionAttribute(gl, buffers, shaderInfo);
   setTextureAttribute(gl, buffers, shaderInfo);
+  setNormalAttribute(gl, buffers, shaderInfo);
   gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffers.indices);
   gl.useProgram(shaderInfo.shader);
   gl.uniformMatrix4fv(
-    shaderInfo.uniformLocations.projection,
+    shaderInfo.uniformLocations.projectionMatrix,
     false,
     projection
   );
-  gl.uniformMatrix4fv(shaderInfo.uniformLocations.modelView, false, modelView);
+  gl.uniformMatrix4fv(
+    shaderInfo.uniformLocations.modelViewMatrix,
+    false,
+    modelView
+  );
+  gl.uniformMatrix4fv(shaderInfo.uniformLocations.normalMatrix, false, normal);
   gl.activeTexture(gl.TEXTURE0);
   gl.bindTexture(gl.TEXTURE_2D, texture);
   gl.uniform1i(shaderInfo.uniformLocations.sampler, 0);
@@ -114,6 +123,30 @@ function setTextureAttribute(gl, buffers, shaderInfo) {
     offset
   );
   gl.enableVertexAttribArray(shaderInfo.attributeLocations.textureCoord);
+}
+
+/**
+ *
+ * @param {WebGLRenderingContext} gl
+ * @param {import("./init-buffers").Buffers} buffers
+ * @param {import("./main").ShaderInfo} shaderInfo
+ */
+function setNormalAttribute(gl, buffers, shaderInfo) {
+  const numComponents = 3;
+  const type = gl.FLOAT;
+  const normalize = false;
+  const stride = 0;
+  const offset = 0;
+  gl.bindBuffer(gl.ARRAY_BUFFER, buffers.normal);
+  gl.vertexAttribPointer(
+    shaderInfo.attributeLocations.normal,
+    numComponents,
+    type,
+    normalize,
+    stride,
+    offset
+  );
+  gl.enableVertexAttribArray(shaderInfo.attributeLocations.normal);
 }
 
 export { drawScene };

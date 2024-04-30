@@ -14,16 +14,25 @@ function main() {
   const vertexShader = `#version 300 es
         #pragma vscode_glsllint_stage: vert
         in vec4 position;
+        in vec3 normal;
         in vec2 textureCoord;
 
-        uniform mat4 modelView;
-        uniform mat4 projection;
+        uniform mat4 normalMatrix;
+        uniform mat4 modelViewMatrix;
+        uniform mat4 projectionMatrix;
 
         out highp vec2 vTextureCoord;
+        out highp vec3 vLighting;
         
         void main() {
-            gl_Position = projection * modelView * position;
+            gl_Position = projectionMatrix * modelViewMatrix * position;
             vTextureCoord = textureCoord;
+            highp vec3 ambientLight = vec3(0.3, 0.3, 0.3);
+            highp vec3 directionalLightColor = vec3(1, 1, 1);
+            highp vec3 directionalVector = normalize(vec3(0.85, 0.8, 0.75));
+            highp vec4 transformedNormal = normalMatrix * vec4(normal, 1.0);
+            highp float directional = max(dot(transformedNormal.xyz, directionalVector), 0.0);
+            vLighting = ambientLight + directionalLightColor * directional;
         }
     `;
   const fragmentShader = `#version 300 es
@@ -32,12 +41,14 @@ function main() {
         precision mediump float;
         
         in highp vec2 vTextureCoord;
+        in highp vec3 vLighting;
 
         uniform sampler2D sampler;
         out vec4 fragColor;
 
         void main(void) {
-            fragColor = texture(sampler, vTextureCoord);
+            highp vec4 texelColor = texture(sampler, vTextureCoord);
+            fragColor = vec4(texelColor.rgb * vLighting, texelColor.a);
         }
     `;
   const shader = initShader(gl, vertexShader, fragmentShader);
@@ -51,11 +62,13 @@ function main() {
     shader,
     attributeLocations: {
       position: gl.getAttribLocation(shader, "position"),
+      normal: gl.getAttribLocation(shader, "normal"),
       textureCoord: gl.getAttribLocation(shader, "textureCoord"),
     },
     uniformLocations: {
-      projection: gl.getUniformLocation(shader, "projection"),
-      modelView: gl.getUniformLocation(shader, "modelView"),
+      projectionMatrix: gl.getUniformLocation(shader, "projectionMatrix"),
+      normalMatrix: gl.getUniformLocation(shader, "normalMatrix"),
+      modelViewMatrix: gl.getUniformLocation(shader, "modelViewMatrix"),
       sampler: gl.getUniformLocation(shader, "sampler"),
     },
   };
@@ -94,10 +107,12 @@ function main() {
  * @property {WebGLProgram} shader - The WebGL shader program.
  * @property {Object} attributeLocations - The attribute locations.
  * @property {number} attributeLocations.position - The position attribute location.
+ * @property {number} attributeLocations.normal - The normal attribute location.
  * @property {number} attributeLocations.textureCoord - The texture attribute location.
  * @property {Object} uniformLocations - The uniform locations.
- * @property {WebGLUniformLocation | null} uniformLocations.projection - The projection uniform location.
- * @property {WebGLUniformLocation | null} uniformLocations.modelView - The model view uniform location.
+ * @property {WebGLUniformLocation | null} uniformLocations.projectionMatrix - The projection uniform location.
+ * @property {WebGLUniformLocation | null} uniformLocations.normalMatrix - The normal uniform location.
+ * @property {WebGLUniformLocation | null} uniformLocations.modelViewMatrix - The model view uniform location.
  * @property {WebGLUniformLocation | null} uniformLocations.sampler - The sampler uniform location.
  */
 
