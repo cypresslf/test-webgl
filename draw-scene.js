@@ -5,8 +5,9 @@ const { mat4 } = glMatrix;
  * @param {WebGLRenderingContext} gl
  * @param {import("./main").ShaderInfo} shaderInfo
  * @param {import("./init-buffers").Buffers} buffers
+ * @param {number} squareRotation
  */
-function drawScene(gl, shaderInfo, buffers) {
+function drawScene(gl, shaderInfo, buffers, squareRotation) {
   if (gl.canvas instanceof OffscreenCanvas) {
     console.error("canvas is offscreen. cannot draw scene");
     return;
@@ -29,6 +30,7 @@ function drawScene(gl, shaderInfo, buffers) {
 
   const modelView = mat4.create();
   mat4.translate(modelView, modelView, [-0, 0, -6]);
+  mat4.rotate(modelView, modelView, squareRotation, [0, 0, 1]);
   setPositionAttribute(gl, buffers, shaderInfo);
   setColorAttributes(gl, buffers, shaderInfo);
   gl.useProgram(shaderInfo.shader);

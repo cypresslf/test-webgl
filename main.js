@@ -64,7 +64,21 @@ function main() {
     console.error("Position buffer was null");
     return;
   }
-  drawScene(gl, shaderInfo, buffers);
+
+  let then = 0;
+  let deltaTime = 0;
+  let squareRotation = 0;
+
+  /** @param {number} now */
+  const render = (now) => {
+    now *= 0.001; // convert to seconds
+    deltaTime = now - then;
+    then = now;
+    drawScene(gl, shaderInfo, buffers, squareRotation);
+    squareRotation += deltaTime;
+    requestAnimationFrame(render);
+  };
+  requestAnimationFrame(render);
 }
 
 /**
