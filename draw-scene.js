@@ -2,7 +2,7 @@
 const { mat4 } = glMatrix;
 
 /**
- * @param {WebGLRenderingContext} gl
+ * @param {WebGL2RenderingContext} gl
  * @param {import("./main").ShaderInfo} shaderInfo
  * @param {import("./init-buffers").Buffers} buffers
  * @param {WebGLTexture} texture
@@ -80,7 +80,7 @@ function drawScene(gl, shaderInfo, buffers, texture, cubeRotation) {
 }
 
 /**
- * @param {WebGLRenderingContext} gl
+ * @param {WebGL2RenderingContext} gl
  * @param {import("./init-buffers").Buffers} buffers
  * @param {import("./main").ShaderInfo} shaderInfo
  */
@@ -103,7 +103,7 @@ function setPositionAttribute(gl, buffers, shaderInfo) {
 }
 
 /**
- * @param {WebGLRenderingContext} gl
+ * @param {WebGL2RenderingContext} gl
  * @param {import("./init-buffers").Buffers} buffers
  * @param {import("./main").ShaderInfo} shaderInfo
  */
@@ -127,7 +127,7 @@ function setTextureAttribute(gl, buffers, shaderInfo) {
 
 /**
  *
- * @param {WebGLRenderingContext} gl
+ * @param {WebGL2RenderingContext} gl
  * @param {import("./init-buffers").Buffers} buffers
  * @param {import("./main").ShaderInfo} shaderInfo
  */

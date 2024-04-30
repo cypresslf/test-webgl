@@ -123,7 +123,7 @@ function main() {
  */
 
 /**
- * @param {WebGLRenderingContext} gl
+ * @param {WebGL2RenderingContext} gl
  * @param {string} vertexShaderSource
  * @param {string} fragmentShaderSource
  */
@@ -158,7 +158,7 @@ function initShader(gl, vertexShaderSource, fragmentShaderSource) {
 }
 
 /**
- * @param {WebGLRenderingContext} gl
+ * @param {WebGL2RenderingContext} gl
  * @param {number} type
  * @param {string} source
  */
@@ -181,7 +181,7 @@ function loadShader(gl, type, source) {
 }
 
 /**
- * @param {WebGLRenderingContext} gl
+ * @param {WebGL2RenderingContext} gl
  */
 function initTexture(gl) {
   const texture = gl.createTexture();
@@ -213,7 +213,7 @@ function initTexture(gl) {
 }
 
 /**
- * @param {WebGLRenderingContext} gl
+ * @param {WebGL2RenderingContext} gl
  * @param {WebGLTexture} texture
  * @param {HTMLVideoElement} video
  */

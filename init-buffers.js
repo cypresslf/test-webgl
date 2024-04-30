@@ -7,7 +7,7 @@
  */
 
 /**
- * @param {WebGLRenderingContext} gl
+ * @param {WebGL2RenderingContext} gl
  * @returns {Buffers}
  */
 function initBuffers(gl) {
@@ -19,7 +19,7 @@ function initBuffers(gl) {
   };
 }
 
-/** @param {WebGLRenderingContext} gl */
+/** @param {WebGL2RenderingContext} gl */
 function initPositionBuffer(gl) {
   const positionBuffer = gl.createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
@@ -44,7 +44,7 @@ function initPositionBuffer(gl) {
   return positionBuffer;
 }
 
-/** @param {WebGLRenderingContext} gl */
+/** @param {WebGL2RenderingContext} gl */
 function initTextureBuffer(gl) {
   const textureCoordBuffer = gl.createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, textureCoordBuffer);
@@ -69,7 +69,7 @@ function initTextureBuffer(gl) {
   return textureCoordBuffer;
 }
 
-/** @param {WebGLRenderingContext} gl */
+/** @param {WebGL2RenderingContext} gl */
 function initIndexBuffer(gl) {
   const indexBuffer = gl.createBuffer();
   gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
@@ -96,7 +96,7 @@ function initIndexBuffer(gl) {
   return indexBuffer;
 }
 
-/** @param {WebGLRenderingContext} gl */
+/** @param {WebGL2RenderingContext} gl */
 function initNormalBuffer(gl) {
   const normalBuffer = gl.createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
