@@ -6,7 +6,12 @@ let copyVideo = false;
 main();
 
 function main() {
-  const gl = document.querySelector("canvas")?.getContext("webgl2");
+  const canvas = document.querySelector("canvas");
+  if (!canvas) {
+    console.error("There is no canvas element");
+    return;
+  }
+  const gl = canvas.getContext("webgl2");
   if (!gl) {
     console.error("webgl is unsupported");
     return;
@@ -100,6 +105,13 @@ function main() {
     then = now;
     if (copyVideo) {
       updateTexture(gl, texture, video);
+    }
+    const needResize =
+      canvas.width !== canvas.clientWidth ||
+      canvas.height !== canvas.clientHeight;
+    if (needResize) {
+      canvas.width = canvas.clientWidth;
+      canvas.height = canvas.clientHeight;
     }
     drawScene(gl, shaderInfo, buffers, texture, cubeRotation);
     cubeRotation += deltaTime;
