@@ -85,19 +85,14 @@ function drawScene(gl, shaderInfo, buffers, texture, cubeRotation) {
  * @param {import("./main").ShaderInfo} shaderInfo
  */
 function setPositionAttribute(gl, buffers, shaderInfo) {
-  const numComponents = 3;
-  const type = gl.FLOAT;
-  const normalize = false;
-  const stride = 0;
-  const offset = 0;
   gl.bindBuffer(gl.ARRAY_BUFFER, buffers.position);
   gl.vertexAttribPointer(
     shaderInfo.attributeLocations.position,
-    numComponents,
-    type,
-    normalize,
-    stride,
-    offset
+    3,
+    gl.FLOAT,
+    false,
+    0,
+    0
   );
   gl.enableVertexAttribArray(shaderInfo.attributeLocations.position);
 }
@@ -108,19 +103,14 @@ function setPositionAttribute(gl, buffers, shaderInfo) {
  * @param {import("./main").ShaderInfo} shaderInfo
  */
 function setTextureAttribute(gl, buffers, shaderInfo) {
-  const num = 2;
-  const type = gl.FLOAT;
-  const normalize = false;
-  const stride = 0;
-  const offset = 0;
   gl.bindBuffer(gl.ARRAY_BUFFER, buffers.textureCoord);
   gl.vertexAttribPointer(
     shaderInfo.attributeLocations.textureCoord,
-    num,
-    type,
-    normalize,
-    stride,
-    offset
+    2,
+    gl.FLOAT,
+    false,
+    0,
+    0
   );
   gl.enableVertexAttribArray(shaderInfo.attributeLocations.textureCoord);
 }
@@ -132,19 +122,14 @@ function setTextureAttribute(gl, buffers, shaderInfo) {
  * @param {import("./main").ShaderInfo} shaderInfo
  */
 function setNormalAttribute(gl, buffers, shaderInfo) {
-  const numComponents = 3;
-  const type = gl.FLOAT;
-  const normalize = false;
-  const stride = 0;
-  const offset = 0;
   gl.bindBuffer(gl.ARRAY_BUFFER, buffers.normal);
   gl.vertexAttribPointer(
     shaderInfo.attributeLocations.normal,
-    numComponents,
-    type,
-    normalize,
-    stride,
-    offset
+    3,
+    gl.FLOAT,
+    false,
+    0,
+    0
   );
   gl.enableVertexAttribArray(shaderInfo.attributeLocations.normal);
 }
